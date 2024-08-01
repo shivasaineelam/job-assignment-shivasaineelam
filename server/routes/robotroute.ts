@@ -10,9 +10,9 @@ router.use((req: Request, res: Response, next: Function) => {
 });
 
 router.get("/", async (req: Request, res: Response) => {
-  const username = req.user;
+  const username = req.user as {username:string};
   try {
-    const data = await Robot.find();
+    const data = await Robot.find({ createdBy: username });
     res.send(data);
   } catch {
     res.send("error occured");
@@ -20,13 +20,13 @@ router.get("/", async (req: Request, res: Response) => {
 });
 router.post("/", async (req: Request, res: Response) => {
   try {
-    // const createdBy = req.user?.username;
-    console.log(req.user, "fskfka");
+    const username = req.user as {username:string};
+
     const {
       name,
       description,
       status,
-      createdBy,
+      createdBy=username,
       createdAt = Date.now(),
       updatedAt = Date.now(),
     } = req.body;

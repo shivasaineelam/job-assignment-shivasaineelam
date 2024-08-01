@@ -6,19 +6,10 @@ import bcrypt from "bcrypt";
 passport.use(new LocalStrategy(
   async (username: string, password: string, done: Function) => {
     try {
-      console.log('Attempting to authenticate user:', username,password);
       const user = await User.findOne({ username });
-      console.log('User found:', user);
       
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-      console.log('Password match:', isMatch);
-
-      if (!isMatch) {
-        return done(null, false, { message: 'Incorrect password.' });
       }
 
       return done(null, user);
